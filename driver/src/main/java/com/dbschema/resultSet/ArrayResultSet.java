@@ -409,16 +409,18 @@ public class ArrayResultSet implements ResultSet
             columnDisplaySizes[i] = columnNames[i].length();
             columnJavaTypes[i] = Types.VARCHAR;
 		}
-		for (Object[] row : data) {
-			for ( int columnIdx = 0; columnIdx < row.length; columnIdx++) {
-				if (row[columnIdx] != null) {
-					int datalength = row[columnIdx].toString().length();
-					if (datalength > columnDisplaySizes[columnIdx]) {
-						columnDisplaySizes[columnIdx] = datalength;
+		if(data!=null) {
+			for (Object[] row : data) {
+				for (int columnIdx = 0; columnIdx < row.length; columnIdx++) {
+					if (row[columnIdx] != null) {
+						int datalength = row[columnIdx].toString().length();
+						if (datalength > columnDisplaySizes[columnIdx]) {
+							columnDisplaySizes[columnIdx] = datalength;
+						}
 					}
 				}
+
 			}
-			
 		}
 		
 		return new MongoResultSetMetaData(tableName, columnNames, columnJavaTypes, columnDisplaySizes);

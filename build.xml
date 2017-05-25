@@ -32,7 +32,7 @@
             <fileset dir="driver/src/main/resources/jar"/>
             <manifest>
                 <attribute name="Main-Class" value="com.dbschema.MongoJdbcDriver"/>
-                <attribute name="Class-Path" value="${driver.classpath.jar}"/>
+                <!--<attribute name="Class-Path" value="${driver.classpath.jar}"/>-->
                 <attribute name="Specification-Version" value="${driver.version}"/>
                 <attribute name="Specification-Vendor" value="Wise Coders Technologies"/>
                 <attribute name="Implementation-Vendor-Id" value="dbschema.com"/>
