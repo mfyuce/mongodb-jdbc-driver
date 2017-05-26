@@ -9,18 +9,29 @@ import com.mongodb.client.MongoIterable;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 
 public class JMongoClient {
 
-    private final MongoClient mongoClient;
+    private final static Map<String,MongoClient> mongoClients = new LinkedHashMap<>();
+    private final static Object mongoClientsSync = new Object();
+    private MongoClient mongoClient ;
     public final String databaseName;
 
-    public JMongoClient( String uri ){
+    public  JMongoClient( String uri ){
         // TODO HERE CAN FIND DATABASE FROM URI
         final MongoClientURI clientURI = new MongoClientURI(uri);
         this.databaseName = clientURI.getDatabase();
-        this.mongoClient = new MongoClient(clientURI );
+        if (!mongoClients.containsKey(uri)) {
+            synchronized(mongoClientsSync) {
+                if (!mongoClients.containsKey(uri)) {
+                    mongoClients.put(uri, new MongoClient(clientURI));
+                }
+            }
+        }
+        this.mongoClient = mongoClients.get(uri);
     }
 
     public MongoClientOptions getMongoClientOptions() {
