@@ -22,6 +22,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map;
@@ -155,7 +156,12 @@ public class MongoPreparedStatement implements PreparedStatement {
                 lastResultSet = new AggregateResultSet( (AggregationOutput)obj );
             } else if ( obj instanceof JMongoCollection ){
                 lastResultSet = new ResultSetIterator( ((JMongoCollection)obj).find() );
+            }else if (  obj instanceof Long ){
+                lastResultSet = new ResultSetIterator(Arrays.asList(  (Long)obj ) );
             }
+//            else if ( obj instanceof long ){
+//                lastResultSet = new ResultSetIterator( Arrays.asList(  (long)obj ));
+//            }
             return lastResultSet;
         } catch ( Throwable ex ){
             ex.printStackTrace();
