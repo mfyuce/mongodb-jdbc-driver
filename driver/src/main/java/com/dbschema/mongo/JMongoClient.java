@@ -61,4 +61,7 @@ public class JMongoClient {
     public void testConnectivity(){
         mongoClient.getAddress();
     }
+    public MongoClient getClient(){
+        return  mongoClient;
+    }
 }

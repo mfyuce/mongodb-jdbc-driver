@@ -1,6 +1,7 @@
 package com.dbschema;
 
 import com.dbschema.mongo.JMongoDatabase;
+import com.mongodb.MongoClient;
 import com.dbschema.schema.MetaCollection;
 
 import java.util.Collection;
@@ -32,5 +33,9 @@ public interface Service {
 
     public String getVersion();
 
-
+    /**
+     * If jdbc-driver does not work, fallback to client
+     * @return
+     */
+    public MongoClient getClient();
 }

@@ -4,6 +4,8 @@ import com.dbschema.Service;
 import com.dbschema.mongo.parser.ScanStrategy;
 import com.dbschema.schema.MetaCollection;
 import com.dbschema.schema.MetaField;
+import com.dbschema.mongo.JMongoClient;
+import com.mongodb.MongoClient;
 import org.bson.types.ObjectId;
 
 import java.net.UnknownHostException;
@@ -25,7 +27,10 @@ public class MongoService implements Service {
         this.scanStrategy = scanStrategy;
         client = new JMongoClient( uri );
     }
-
+    @Override
+    public MongoClient getClient(){
+        return client.getClient();
+    }
     @Override
     public String getCurrentDatabaseName() {
         // SEE THIS TO SEE HOW DATABASE NAME IS USED : http://api.mongodb.org/java/current/com/mongodb/MongoClientURI.html
