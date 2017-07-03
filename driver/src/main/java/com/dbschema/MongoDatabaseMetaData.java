@@ -51,9 +51,12 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
         return retVal;
 
     }
-
-
-
+    private String getCatalogNameIfNotProvidedByTheCaller(String catalogName){
+        if ( catalogName == null && con.getCatalog()!=null){
+            catalogName = con.getCatalog();
+        }
+        return catalogName;
+    }
     /**
      * @see java.sql.DatabaseMetaData#getTables(java.lang.String, java.lang.String, java.lang.String,
      *      java.lang.String[])
@@ -65,6 +68,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
         resultSet.setColumnNames(new String[]{"TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME",
                 "TABLE_TYPE", "REMARKS", "TYPE_CAT", "TYPE_SCHEM", "TYPE_NAME", "SELF_REFERENCING_COL_NAME",
                 "REF_GENERATION"});
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         if ( catalogName == null ){
             for ( String cat : con.getService().getDatabaseNames() ) {
                 for (String tableName : con.getService().getCollectionNames( cat ) ) {
@@ -103,6 +107,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     @Override
     public ResultSet getColumns(String catalogName, String schemaName, String tableNamePattern, String columnNamePattern) throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         // As far as this driver implementation goes, every "table" in MongoDB is actually a collection, and
         // every collection "table" has two columns - "_id" column which is the primary key, and a "document"
         // column which is the JSON document corresponding to the "_id". An "_id" value can be specified on
@@ -165,6 +170,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
      */
     public ResultSet getPrimaryKeys(String catalogName, String schemaName, String tableNamePattern) throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         /*
         * 	<LI><B>TABLE_CAT</B> String => table catalog (may be <code>null</code>)
        *	<LI><B>TABLE_SCHEM</B> String => table schema (may be <code>null</code>)
@@ -209,6 +215,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getIndexInfo(String catalogName, String schemaName, String tableNamePattern, boolean unique,
                                   boolean approximate) throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         /*
         *      *  <OL>
             *	<LI><B>TABLE_CAT</B> String => table catalog (may be <code>null</code>)
@@ -1171,6 +1178,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getProcedures(String catalogName, String schemaPattern, String procedureNamePattern)
             throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         ArrayResultSet retVal = new ArrayResultSet();
         retVal.setColumnNames(new String[] { "PROCEDURE_CAT", "PROCEDURE_SCHEMA", "PROCEDURE_NAME", "REMARKS",
                 "PROCEDURE_TYPE", "SPECIFIC_NAME" });
@@ -1185,6 +1193,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getProcedureColumns(String catalogName, String schemaPattern, String procedureNamePattern,
                                          String columnNamePattern) throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return EMPTY_RESULT_SET;
     }
 
@@ -1204,7 +1213,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getColumnPrivileges(String catalogName, String schemaName, String table, String columnNamePattern)
             throws SQLException
     {
-
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return null;
     }
 
@@ -1212,7 +1221,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getTablePrivileges(String catalogName, String schemaPattern, String tableNamePattern)
             throws SQLException
     {
-
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return null;
     }
 
@@ -1220,7 +1229,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getBestRowIdentifier(String catalogName, String schemaName, String table, int scope,
                                           boolean nullable) throws SQLException
     {
-
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return null;
     }
 
@@ -1230,11 +1239,13 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     @Override
     public ResultSet getVersionColumns(String catalogName, String schemaName, String table) throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return EMPTY_RESULT_SET;
     }
 
     @Override
     public ResultSet getExportedKeys(String catalogName, String schemaName, String tableNamePattern) throws SQLException {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         con.getService().discoverReferences();
 
 
@@ -1288,6 +1299,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     @Override
     public ResultSet getImportedKeys(String catalogName, String schemaName, String tableNamePattern ) throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         con.getService().discoverReferences();
 
 
@@ -1418,6 +1430,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     @Override
     public ResultSet getUDTs(String catalogName, String schemaPattern, String typeNamePattern, int[] types)
             throws SQLException	{
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         ArrayResultSet retVal = new ArrayResultSet();
         retVal.setColumnNames(new String[] { "TYPE_CAT", "TYPE_SCHEM", "TYPE_NAME", "CLASS_NAME", "DATA_TYPE",
                 "REMARKS", "BASE_TYPE", });
@@ -1468,6 +1481,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     public ResultSet getSuperTypes(String catalogName, String schemaPattern, String typeNamePattern)
             throws SQLException
     {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         ArrayResultSet retVal = new ArrayResultSet();
         retVal.setColumnNames(new String[] { "TYPE_CAT", "TYPE_SCHEM", "TYPE_NAME", "SUPERTYPE_CAT",
                 "SUPERTYPE_SCHEM", "SUPERTYPE_NAME" });
@@ -1493,6 +1507,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     @Override
     public ResultSet getAttributes(String catalogName, String schemaPattern, String typeNamePattern,
                                    String attributeNamePattern) throws SQLException {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         ArrayResultSet retVal = new ArrayResultSet();
         retVal.setColumnNames(new String[] { "TYPE_CAT", "TYPE_SCHEM", "TYPE_NAME", "ATTR_NAME", "DATA_TYPE",
                 "ATTR_TYPE_NAME", "ATTR_SIZE", "DECIMAL_DIGITS", "NUM_PREC_RADIX", "NULLABLE", "REMARKS",
@@ -1583,6 +1598,7 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
      */
     @Override
     public ResultSet getSchemas(String catalogName, String schemaPattern) throws SQLException {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         ArrayResultSet retVal = new ArrayResultSet();
         retVal.setColumnNames(new String[] { "TABLE_SCHEM", "TABLE_CATALOG" });
         return retVal;
@@ -1615,11 +1631,13 @@ public class MongoDatabaseMetaData implements DatabaseMetaData
     @Override
     public ResultSet getFunctionColumns(String catalogName, String schemaPattern, String functionNamePattern,
                                         String columnNamePattern) throws SQLException {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return null;
     }
 
     @Override
     public ResultSet getPseudoColumns(String catalogName, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
+        catalogName=getCatalogNameIfNotProvidedByTheCaller(catalogName);
         return null;
     }
 
