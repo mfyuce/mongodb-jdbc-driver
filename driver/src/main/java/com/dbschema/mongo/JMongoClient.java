@@ -24,14 +24,17 @@ public class JMongoClient {
 
     public  JMongoClient( String uri ){
         // TODO HERE CAN FIND DATABASE FROM URI
-        final MongoClientURI clientURI = new MongoClientURI(uri);
+        MongoClientOptions.Builder options = MongoClientOptions.builder();
+        options.socketKeepAlive(true);
+        final MongoClientURI clientURI = new MongoClientURI(uri,options );
         this.databaseName = clientURI.getDatabase();
         if (!mongoClients.containsKey(uri)) {
             synchronized(mongoClientsSync) {
                 if (!mongoClients.containsKey(uri)) {
-                    MongoClientOptions.Builder options = MongoClientOptions.builder();
-                    options.socketKeepAlive(true);
-                    mongoClients.put(uri, new MongoClient(new ServerAddress(uri),options.build()));
+                    MongoClient client =new MongoClient(clientURI);
+                    mongoClients.put(uri, client);
+
+
                 }
             }
         }
