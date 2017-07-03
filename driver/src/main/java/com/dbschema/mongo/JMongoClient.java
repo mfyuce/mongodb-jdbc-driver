@@ -1,5 +1,7 @@
 package com.dbschema.mongo;
 
+
+import com.mongodb.ServerAddress;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
@@ -27,7 +29,9 @@ public class JMongoClient {
         if (!mongoClients.containsKey(uri)) {
             synchronized(mongoClientsSync) {
                 if (!mongoClients.containsKey(uri)) {
-                    mongoClients.put(uri, new MongoClient(clientURI));
+                    MongoClientOptions.Builder options = MongoClientOptions.builder();
+                    options.socketKeepAlive(true);
+                    mongoClients.put(uri, new MongoClient(new ServerAddress(uri),options.build()));
                 }
             }
         }
