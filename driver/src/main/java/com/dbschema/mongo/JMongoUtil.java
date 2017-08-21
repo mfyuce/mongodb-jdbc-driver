@@ -4,10 +4,15 @@ import com.dbschema.mongo.parser.JsonLoaderCallback;
 import com.dbschema.mongo.parser.JsonParseException;
 import com.dbschema.mongo.parser.JsonParser;
 import org.bson.Document;
+import org.bson.types.*;
+
+import java.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import java.util.stream.Collectors;
 
 public class JMongoUtil {
 
@@ -19,9 +24,37 @@ public class JMongoUtil {
         }
         JsonLoaderCallback callback = new JsonLoaderCallback();
         JsonParser.parse( text, callback );
+//        cnv( callback.map);
         return new Document(callback.map);
     }
 
+//    public static ObjectId cnv(Object obj) {
+//        if (obj instanceof Map) {
+//            Map<String, Object>map = (Map<String, Object>) obj;
+//            List<String> keys = map.keySet().stream().collect(Collectors.toList());
+//
+//            for (int i = 0; i < keys.size(); i++) {
+//                String key = keys.get(i);
+//                Object value = map.get(key);
+//                if (key.equals("$oid")) {
+//                    return (ObjectId) value;
+//                }
+//                if (value instanceof Map) {
+//                    ObjectId ret = cnv(value);
+//                    if(ret!=null){
+//                        map.replace(key,ret);
+//                    }
+//                }
+//                cnv(Object obj)
+//            }
+//        }
+//        if (obj instanceof Collection) {
+//            for (Object c:(List)obj) {
+//                cnv(c);
+//            }
+//        }
+//        return null;
+//    }
     /*
     try {
             return Document.parse(text );

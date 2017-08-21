@@ -37,6 +37,13 @@ public class JsonLoaderCallback implements JsonCallback {
         if ( path.size() > 1 ) {
             Object ret = path.get(path.size() - 1);
             path.remove( path.size() - 1 );
+            if(ret instanceof  Map){
+                Map<String , Object> map = (Map<String , Object>)ret;
+                if(map.containsKey("$oid")){
+//                    path.remove( path.size() - 1 );
+                    ret = map.get("$oid");
+                }
+            }
             return ret;
         }
         return null;

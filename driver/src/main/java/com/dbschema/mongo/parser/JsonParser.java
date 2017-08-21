@@ -1,5 +1,6 @@
 package com.dbschema.mongo.parser;
 
+import org.bson.types.*;
 
 
 public class JsonParser {
@@ -229,9 +230,15 @@ class JSonParserInternal {
         if (value == null) {
             _callback.gotNull(name);
         } else if (value instanceof String) {
-            _callback.gotString(name, (String) value);
+            if(name.equals("$oid")){
+                _callback.gotObjectId(name, new ObjectId((String)value));
+            }else {
+                _callback.gotString(name, (String) value);
+            }
         } else if (value instanceof Boolean) {
             _callback.gotBoolean(name, (Boolean) value);
+        } else if (value instanceof ObjectId) {
+            _callback.gotObjectId(name, (ObjectId) value);
         } else if (value instanceof Integer) {
             _callback.gotInt(name, (Integer) value);
         } else if (value instanceof Long) {

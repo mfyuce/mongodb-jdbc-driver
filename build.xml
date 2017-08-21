@@ -23,7 +23,7 @@
         <echo message="------------------ Compile  #${buildnum} -----------------"/>
 
         <mkdir dir="target/classes"/>
-        <javac destdir="target/classes" debug="true" debuglevel="lines,source" deprecation="on" source="1.7" target="1.7">
+        <javac destdir="target/classes" debug="true" debuglevel="lines,source" deprecation="on" source="1.8" target="1.8">
             <classpath refid="driver.classpath" />
             <src path="driver/src/main/java"/>
         </javac>
